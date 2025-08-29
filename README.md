@@ -2,7 +2,7 @@
 
 ### Proje Tanımı
 
-#### Kullanıcıların basit projeler ve bu projelere ait görevler oluşturabileceği bir web uygulaması geliştirmenizi istiyoruz.
+Kullanıcıların basit projeler ve bu projelere ait görevler oluşturabileceği bir web uygulamasının backend kısmı.
 
 Bu proje C# .NET 9 ile yazılmıştır.
 
@@ -19,7 +19,7 @@ Bu proje C# .NET 9 ile yazılmıştır.
 1. Repo klonlayın veya zip olarak indirin:
 
 ```bash
-git clone <repository-url>
+git clone https://https://github.com/Rocktiel/project_tracking_app_backend.git
 cd MiniProject.Api
 ```
 
