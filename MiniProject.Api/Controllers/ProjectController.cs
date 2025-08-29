@@ -10,12 +10,14 @@ namespace MiniProject.Api.Controllers
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
+        // Servis imp
         private readonly IProjectService _projectService;
         public ProjectController(IProjectService projectService)
         {
             _projectService = projectService;
         }
 
+        // Bütün projeleri getir
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -23,6 +25,7 @@ namespace MiniProject.Api.Controllers
             return Ok(projects);
         }
 
+        // Idye göre proje getir
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -31,6 +34,7 @@ namespace MiniProject.Api.Controllers
             return Ok(project);
         }
 
+        // Proje ekle
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateProjectDto createProjectDto)
         {
@@ -38,6 +42,7 @@ namespace MiniProject.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = project.Id }, project);
         }
 
+        // Proje sil
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -46,6 +51,7 @@ namespace MiniProject.Api.Controllers
             return Ok(deletedProject);
         }
 
+        // Proje güncelle
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Project project)
         {
