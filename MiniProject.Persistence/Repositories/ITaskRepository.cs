@@ -12,7 +12,7 @@ namespace MiniProject.Persistence.Repositories
         Task<Task?> Update(int id, Task task);
         Task<Task?> Delete(int id);
 
-        Task<Task?> UpdateIsCompleted(int id, bool isCompleted);
+        Task<Task?> UpdateIsCompleted(int id);
 
         Task<IEnumerable<Task>> GetByProjectId(int projectId);
     }

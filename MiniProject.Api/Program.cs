@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
+         policy.WithOrigins("http://localhost:4200") // Angular uygulamanızın adresi
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -58,7 +58,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAllOrigins");
+app.UseCors();
 
 
 app.MapControllers();

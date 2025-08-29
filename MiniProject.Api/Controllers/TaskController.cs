@@ -55,10 +55,10 @@ namespace MiniProject.Api.Controllers
 
        
 
-        [HttpPut("{id}/isCompleted/{isCompleted}")] 
-        public async Task<IActionResult> UpdateIsCompleted(int id, bool isCompleted)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateIsCompleted(int id)
         {
-            var updatedTask = await _taskService.UpdateIsCompleted(id, isCompleted);
+            var updatedTask = await _taskService.UpdateIsCompleted(id);
             if (updatedTask == null) return NotFound();
             return Ok(updatedTask);
         }

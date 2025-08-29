@@ -54,12 +54,12 @@ namespace MiniProject.Persistence.Repositories
             return taskToUpdate;
         }
 
-        public async Task<Task?> UpdateIsCompleted(int id, bool isCompleted)
+        public async Task<Task?> UpdateIsCompleted(int id)
         {
             var existingTask = await _context.Tasks.FindAsync(id);
             if (existingTask == null) return null;
 
-            existingTask.IsCompleted = isCompleted;
+            existingTask.IsCompleted = true;
 
             await _context.SaveChangesAsync();
             return existingTask;

@@ -12,7 +12,7 @@ namespace MiniProject.Application.Services
         Task<TaskDto> Add(CreateTaskDto createTaskDto);
         Task<TaskDto?> Update(int id, Task task);
         Task<TaskDto?> Delete(int id);
-        Task<TaskDto?> UpdateIsCompleted(int id, bool isCompleted);
+        Task<TaskDto?> UpdateIsCompleted(int id);
         Task<IEnumerable<TaskDto>> GetByProjectId(int projectId);
     }
 }

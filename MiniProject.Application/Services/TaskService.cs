@@ -7,9 +7,11 @@ namespace MiniProject.Application.Services
     public class TaskService : ITaskService
     {
         private readonly ITaskRepository _taskRepository;
-        public TaskService(ITaskRepository taskRepository)
+        private readonly IProjectRepository _projectRepository;
+        public TaskService(ITaskRepository taskRepository, IProjectRepository projectRepository)
         {
             _taskRepository = taskRepository;
+            _projectRepository = projectRepository;
         }
         public async Task<IEnumerable<TaskDto>> GetAll()
         {
@@ -38,6 +40,11 @@ namespace MiniProject.Application.Services
         }
         public async Task<TaskDto> Add(CreateTaskDto createTaskDto)
         {
+             var project = await _projectRepository.GetById(createTaskDto.ProjectId);
+            if (project == null)
+            {
+                throw new InvalidOperationException($"Project with ID {createTaskDto.ProjectId} not found");
+            }
             var task = new Task
             {
                 Title = createTaskDto.Title,
@@ -83,9 +90,9 @@ namespace MiniProject.Application.Services
         };
     }
 
-    public async Task<TaskDto?> UpdateIsCompleted(int id, bool isCompleted)
+    public async Task<TaskDto?> UpdateIsCompleted(int id)
     {
-        var updatedTask = await _taskRepository.UpdateIsCompleted(id, isCompleted);
+        var updatedTask = await _taskRepository.UpdateIsCompleted(id);
         if (updatedTask == null) return null;
 
         return new TaskDto
