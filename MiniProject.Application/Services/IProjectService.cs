@@ -1,13 +1,14 @@
+using MiniProject.Application.DTOs;
 using MiniProject.Persistence.Entities;
 
 namespace MiniProject.Application.Services
 {
     public interface IProjectService
     {
-        Task<IEnumerable<Project>> GetAll();
-        Task<Project?> GetById(int id);
-        Task<Project> Add(Project project);
-        Task<Project?> Update(int id, Project project);
-        Task<Project?> Delete(int id);
+        Task<IEnumerable<ProjectDto>> GetAll();
+        Task<ProjectDto?> GetById(int id);
+        Task<ProjectDto> Add(CreateProjectDto createProjectDto);
+        Task<ProjectDto?> Update(int id, Project project);
+        Task<ProjectDto?> Delete(int id);
     }
 }

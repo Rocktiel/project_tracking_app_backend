@@ -1,15 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace MiniProject.Persistence.Entities
+namespace MiniProject.Application.DTOs
 {
-    public class Task
+    public class TaskDto
     {
         public int Id { get; set; }
-        [Required]
         public required string Title { get; set; }
         public bool IsCompleted { get; set; }
         public int ProjectId { get; set; }
         
-        public Project? Project { get; set; }
     }
 }

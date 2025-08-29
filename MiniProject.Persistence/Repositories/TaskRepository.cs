@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MiniProject.Persistence.Contexts;
 using MiniProject.Persistence.Entities;
 using Task = MiniProject.Persistence.Entities.Task;
@@ -11,28 +12,64 @@ namespace MiniProject.Persistence.Repositories
         {
             _context = context;
         }
-        public Task<IEnumerable<Task>> GetAll()
+        public async Task<IEnumerable<Task>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Tasks.ToListAsync();
         }
 
-        public Task<Task?> GetById(int id)
+        public async Task<Task?> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Tasks.FindAsync(id);
         }
-        public Task<Task> Add(Task project)
+        public async Task<Task> Add(Task task)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Task?> Delete(int id)
-        {
-            throw new NotImplementedException();
+            await _context.Tasks.AddAsync(task);
+            await _context.SaveChangesAsync();
+            return task;
         }
 
-        public Task<Task?> Update(int id, Task project)
+        public async Task<Task?> Delete(int id)
         {
-            throw new NotImplementedException();
+            var taskToDelete =  await _context.Tasks.FindAsync(id);
+            if (taskToDelete == null)
+            {
+                return null;
+            }
+            _context.Tasks.Remove(taskToDelete);
+            await _context.SaveChangesAsync();
+            return taskToDelete;
+        }
+
+        public async Task<Task?> Update(int id, Task task)
+        {
+            var taskToUpdate = await _context.Tasks.FindAsync(id);
+            if (taskToUpdate == null)
+            {
+                return null;
+            }
+
+           
+            taskToUpdate.IsCompleted = task.IsCompleted;
+            await _context.SaveChangesAsync();
+            return taskToUpdate;
+        }
+
+        public async Task<Task?> UpdateIsCompleted(int id, bool isCompleted)
+        {
+            var existingTask = await _context.Tasks.FindAsync(id);
+            if (existingTask == null) return null;
+
+            existingTask.IsCompleted = isCompleted;
+
+            await _context.SaveChangesAsync();
+            return existingTask;
+        }
+
+        public async Task<IEnumerable<Task>> GetByProjectId(int projectId)
+        {
+             return await _context.Tasks
+                             .Where(t => t.ProjectId == projectId)
+                             .ToListAsync();
         }
     }
 }

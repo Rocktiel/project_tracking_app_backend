@@ -1,15 +1,18 @@
 using Task = MiniProject.Persistence.Entities.Task;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using MiniProject.Application.DTOs;
 
 namespace MiniProject.Application.Services
 {
     public interface ITaskService
     {
-        Task<IEnumerable<Task>> GetAll();
-        Task<Task> GetById(int id);
-        Task<Task> Add(Task task);
-        Task<Task?> Update(int id, Task task);
-        Task<Task?> Delete(int id);
+        Task<IEnumerable<TaskDto>> GetAll();
+        Task<TaskDto?> GetById(int id);
+        Task<TaskDto> Add(CreateTaskDto createTaskDto);
+        Task<TaskDto?> Update(int id, Task task);
+        Task<TaskDto?> Delete(int id);
+        Task<TaskDto?> UpdateIsCompleted(int id, bool isCompleted);
+        Task<IEnumerable<TaskDto>> GetByProjectId(int projectId);
     }
 }

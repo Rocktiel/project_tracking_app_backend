@@ -1,3 +1,4 @@
+using MiniProject.Application.DTOs;
 using MiniProject.Persistence.Entities;
 using MiniProject.Persistence.Repositories;
 
@@ -10,30 +11,71 @@ namespace MiniProject.Application.Services
         {
             _projectRepository = projectRepository;
         }
-        public Task<IEnumerable<Project>> GetAll()
+        public async Task<IEnumerable<ProjectDto>> GetAll()
         {
-            throw new NotImplementedException();
+            var projects = await _projectRepository.GetAll();
+            
+            return projects.Select(p => new ProjectDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description
+            });
         }
 
-        public Task<Project?> GetById(int id)
+        public async Task<ProjectDto?> GetById(int id)
         {
-            throw new NotImplementedException();
+            var project = await _projectRepository.GetById(id);
+            if (project == null) return null;
+            return new ProjectDto
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description
+            };
         }
-        public Task<Project> Add(Project project)
+        public async Task<ProjectDto> Add(CreateProjectDto createProjectDto)
         {
-            throw new NotImplementedException();
+            var project = new Project
+            {
+
+                Name = createProjectDto.Name,
+                Description = createProjectDto.Description,
+            };
+             await _projectRepository.Add(project);
+
+            return new ProjectDto
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description
+            };
         }
 
-        public Task<Project?> Delete(int id)
+        public async Task<ProjectDto?> Delete(int id)
         {
-            throw new NotImplementedException();
+            var deletedProject = await _projectRepository.Delete(id);
+            if (deletedProject == null) return null;
+            return new ProjectDto
+            {
+                Id = deletedProject.Id,
+                Name = deletedProject.Name,
+                Description = deletedProject.Description
+            };
         }
 
-        
 
-        public Task<Project?> Update(int id, Project project)
+
+        public async Task<ProjectDto?> Update(int id, Project project)
         {
-            throw new NotImplementedException();
+            var updatedProject = await _projectRepository.Update(id, project);
+            if (updatedProject == null) return null;
+            return new ProjectDto
+            {
+                Id = updatedProject.Id,
+                Name = updatedProject.Name,
+                Description = updatedProject.Description
+            };
         }
     }
 }
