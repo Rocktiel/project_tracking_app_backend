@@ -43,7 +43,12 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 
 
 var app = builder.Build();
-
+// Veritabanını oluştur
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    db.Database.EnsureCreated();
+}
 
 if (app.Environment.IsDevelopment())
 {

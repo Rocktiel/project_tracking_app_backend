@@ -13,5 +13,61 @@ namespace MiniProject.Api.Controllers
         {
             _taskService = taskService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var tasks = await _taskService.GetAll();
+            return Ok(tasks);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var task = await _taskService.GetById(id);
+            if (task == null) return NotFound();
+            return Ok(task);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] CreateTaskDto createTaskDto)
+        {
+            var task = await _taskService.Add(createTaskDto);
+            return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
+            
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deletedTask = await _taskService.Delete(id);
+            if (deletedTask == null) return NotFound();
+            return Ok(deletedTask);
+        }
+
+        // [HttpPut("{id}")]
+        // public async Task<IActionResult> Update(int id, [FromBody] CreateTaskDto createTaskDto)
+        // {
+        //     var updatedTask = await _taskService.Update(id, createTaskDto);
+        //     if (updatedTask == null) return NotFound();
+        //     return Ok(updatedTask);
+        // }
+
+       
+
+        [HttpPut("{id}/isCompleted/{isCompleted}")] 
+        public async Task<IActionResult> UpdateIsCompleted(int id, bool isCompleted)
+        {
+            var updatedTask = await _taskService.UpdateIsCompleted(id, isCompleted);
+            if (updatedTask == null) return NotFound();
+            return Ok(updatedTask);
+        }
+
+        [HttpGet("project/{projectId}")] 
+        public async Task<IActionResult> GetByProjectId(int projectId)
+        {
+            var tasks = await _taskService.GetByProjectId(projectId);
+            return Ok(tasks);
+        }
     }
 }
