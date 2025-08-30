@@ -19,35 +19,69 @@ namespace MiniProject.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var tasks = await _taskService.GetAll();
-            return Ok(tasks);
+            try
+            {
+                var tasks = await _taskService.GetAll();
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // Idye göre task getir
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var task = await _taskService.GetById(id);
-            if (task == null) return NotFound();
-            return Ok(task);
+            try
+            {
+                var task = await _taskService.GetById(id);
+                if (task == null) return NotFound($"Task with id {id} not found");
+                return Ok(task);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // Task ekle
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateTaskDto createTaskDto)
         {
-            var task = await _taskService.Add(createTaskDto);
-            return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
-            
+            try
+            {
+                if (createTaskDto == null)
+                    return BadRequest("Task data is required");
+
+                var task = await _taskService.Add(createTaskDto);
+                return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // Task sil
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deletedTask = await _taskService.Delete(id);
-            if (deletedTask == null) return NotFound();
-            return Ok(deletedTask);
+            try
+            {
+                var deletedTask = await _taskService.Delete(id);
+                if (deletedTask == null) return NotFound($"Task with id {id} not found");
+                return Ok(deletedTask);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // [HttpPut("{id}")]
@@ -63,17 +97,31 @@ namespace MiniProject.Api.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateIsCompleted(int id)
         {
-            var updatedTask = await _taskService.UpdateIsCompleted(id);
-            if (updatedTask == null) return NotFound();
-            return Ok(updatedTask);
+            try
+            {
+                var updatedTask = await _taskService.UpdateIsCompleted(id);
+                if (updatedTask == null) return NotFound($"Task with id {id} not found");
+                return Ok(updatedTask);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // Proje Idye göre taskları getir
         [HttpGet("project/{projectId}")] 
         public async Task<IActionResult> GetByProjectId(int projectId)
         {
-            var tasks = await _taskService.GetByProjectId(projectId);
-            return Ok(tasks);
+            try
+            {
+                var tasks = await _taskService.GetByProjectId(projectId);
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

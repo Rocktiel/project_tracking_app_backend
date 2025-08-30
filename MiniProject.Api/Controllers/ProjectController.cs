@@ -21,43 +21,92 @@ namespace MiniProject.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var projects = await _projectService.GetAll();
-            return Ok(projects);
+            try
+            {
+                var projects = await _projectService.GetAll();
+                return Ok(projects);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // Idye göre proje getir
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var project = await _projectService.GetById(id);
-            if (project == null) return NotFound();
-            return Ok(project);
+           try
+            {
+                var project = await _projectService.GetById(id);
+                if (project == null) return NotFound($"Project with id {id} not found");
+                return Ok(project);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // Proje ekle
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateProjectDto createProjectDto)
         {
-            var project = await _projectService.Add(createProjectDto);
-            return CreatedAtAction(nameof(GetById), new { id = project.Id }, project);
+            try
+            {
+                if (createProjectDto == null)
+                    return BadRequest("Project data is required");
+
+                var project = await _projectService.Add(createProjectDto);
+                return CreatedAtAction(nameof(GetById), new { id = project.Id }, project);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // Proje sil
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deletedProject = await _projectService.Delete(id);
-            if (deletedProject == null) return NotFound();
-            return Ok(deletedProject);
+             try
+            {
+                var deletedProject = await _projectService.Delete(id);
+                if (deletedProject == null) return NotFound($"Project with id {id} not found");
+                return Ok(deletedProject);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // Proje güncelle
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Project project)
         {
-            var updatedProject = await _projectService.Update(id, project);
-            if (updatedProject == null) return NotFound();
-            return Ok(updatedProject);
+            try
+            {
+                if (project == null)
+                    return BadRequest("Project data is required");
+
+                var updatedProject = await _projectService.Update(id, project);
+                if (updatedProject == null) return NotFound($"Project with id {id} not found");
+                return Ok(updatedProject);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
